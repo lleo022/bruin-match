@@ -62,20 +62,14 @@ function Dashboard() {
       )}
 
       <section className="dashboard-card">
-        <h3>Your next steps</h3>
+        <h3>How to use Bruin Match</h3>
         <ul>
-          {hasProfile ? (
             <>
+              <li>Create your profile with housing preferences.</li>
               <li>Browse potential roommates based on your vibe.</li>
               <li>Send invites to start a group.</li>
+              <li>Start chatting!</li>
             </>
-          ) : (
-            <>
-              <li>Finish your profile with housing preferences.</li>
-              <li>Browse potential roommates based on your vibe.</li>
-              <li>Send invites to start a group.</li>
-            </>
-          )}
         </ul>
       </section>
 
