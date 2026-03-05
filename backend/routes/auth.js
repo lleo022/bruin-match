@@ -5,7 +5,7 @@ const pool = require('../config/db');
 
 const router = express.Router();
 
-// Signup endpoint
+// SIGNUP
 router.post('/signup', async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -14,7 +14,6 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ error: 'Username, email, and password are required' });
     }
 
-    // Check if user already exists
     const userExists = await pool.query(
       'SELECT id FROM users WHERE email = $1 OR username = $2',
       [email, username]
@@ -24,17 +23,14 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ error: 'Username or email already exists' });
     }
 
-    // Hash the password
     const saltRounds = 10;
     const password_hash = await bcrypt.hash(password, saltRounds);
 
-    // Insert new user
     const newUser = await pool.query(
       'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id, username, email, created_at',
       [username, email, password_hash]
     );
 
-    // Create JWT token
     const token = jwt.sign(
       { userId: newUser.rows[0].id },
       process.env.JWT_SECRET,
@@ -53,18 +49,18 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// Login endpoint
+
+// LOGIN
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      return res.status(400).json({ error: 'Username and password are required' });
+      return res.status(400).json({ error: 'Username/email and password are required' });
     }
 
-    // Check if user exists
     const user = await pool.query(
-      'SELECT * FROM users WHERE username = $1',
+      'SELECT * FROM users WHERE username = $1 OR email = $1',
       [username]
     );
 
@@ -72,14 +68,12 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Invalid username or password' });
     }
 
-    // Compare password with hashed password
     const validPassword = await bcrypt.compare(password, user.rows[0].password_hash);
 
     if (!validPassword) {
       return res.status(400).json({ error: 'Invalid username or password' });
     }
 
-    // Create JWT token
     const token = jwt.sign(
       { userId: user.rows[0].id },
       process.env.JWT_SECRET,
@@ -101,5 +95,6 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
 
 module.exports = router;
