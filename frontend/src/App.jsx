@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Onboarding from './pages/Onboarding';
 import Browse from './pages/Browse';
+import SidebarLayout from './components/SidebarLayout';
 
 function App() {
   return (
@@ -14,9 +15,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/onboarding" element={<Onboarding />} />
-        <Route path="/browse" element={<Browse />} />
+        <Route path="/dashboard" element={<SidebarLayout><Dashboard /></SidebarLayout>} />
+        <Route path="/browse" element={<SidebarLayout><Browse /></SidebarLayout>} />
       </Routes>
     </Router>
   );
