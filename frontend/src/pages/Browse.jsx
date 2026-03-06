@@ -116,9 +116,6 @@ function Browse() {
     <div className="browse-page">
       <header className="browse-page-header">
         <div className="browse-page-header-left">
-          <button className="btn btn-ghost back-btn" onClick={() => navigate('/dashboard')}>
-            &larr; Dashboard
-          </button>
           <div>
             <h1 className="browse-page-title">Find Your Roommate</h1>
             <p className="browse-page-subtitle">
